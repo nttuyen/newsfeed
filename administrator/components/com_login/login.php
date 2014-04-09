@@ -11,12 +11,12 @@ defined('_JEXEC') or die;
 
 $input = JFactory::getApplication()->input;
 $task = $input->get('task');
-if ($task != 'login' && $task != 'logout')
+if ($task != 'login' && $task != 'logout' && $task != 'api.login')
 {
 	$input->set('task', '');
 	$task = '';
 }
 
 $controller = JControllerLegacy::getInstance('Login');
-$controller->execute($task);
+$controller->execute($input->get('task'));
 $controller->redirect();
