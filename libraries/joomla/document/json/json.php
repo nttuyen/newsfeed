@@ -60,7 +60,7 @@ class JDocumentJSON extends JDocument
 		$app = JFactory::getApplication();
 
 		$app->allowCache(false);
-		//$app->setHeader('Content-disposition', 'attachment; filename="' . $this->getName() . '.json"', true);
+		$app->setHeader('Content-disposition', 'attachment; filename="' . $this->getName() . '.json"', true);
 
 		parent::render();
 
