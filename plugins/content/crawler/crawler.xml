@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<extension version="3.2" type="plugin" group="content">
+	<name>plg_content_crawler</name>
+	<author>nttuyen266@gmail.com</author>
+	<creationDate>April 2014</creationDate>
+	<copyright>Copyright (C) 2005 - 2014 Open Source Matters. All rights reserved.</copyright>
+	<license>GNU General Public License version 2 or later; see LICENSE.txt</license>
+	<authorEmail>nttuyen266@gmail.com</authorEmail>
+	<authorUrl>www.joomla.org</authorUrl>
+	<version>3.2.2</version>
+	<description>PLG_CONTENT_CRAWLER_XML_DESCRIPTION</description>
+	<files>
+		<filename plugin="contact">crawler.php</filename>
+		<filename>index.html</filename>
+	</files>
+	<languages>
+		<language tag="en-GB">en-GB.plg_content_crawler.ini</language>
+		<language tag="en-GB">en-GB.plg_content_crawler.sys.ini</language>
+	</languages>
+	<config>
+		<fields name="params">
+		</fields>
+	</config>
+</extension>
