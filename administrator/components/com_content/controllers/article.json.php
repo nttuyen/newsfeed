@@ -137,6 +137,18 @@ class ContentControllerArticle extends JControllerForm {
 
 
         } else {
+            //CheckedIn
+            //$task = $this->getTask();
+            $context = "$this->option.edit.$this->context";
+            $ids = $app->getUserState($context . '.id');
+            $model = $this->getModel();
+            foreach($ids as $id) {
+                try {
+                    $model->checkin(array($id));
+                    $this->releaseEditId($context, $id);
+                } catch(Exception $ex) {}
+            }
+
             $doc->setStatus(201);
             $doc->setData(array('result' => $result));
             //TODO: return link to access to this article
