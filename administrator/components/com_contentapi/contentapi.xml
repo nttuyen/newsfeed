@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<extension type="component" version="3.2" method="upgrade">
+	<name>com_contentapi</name>
+	<author>nttuyen266@gmail.com</author>
+	<creationDate>Apirl 2013</creationDate>
+	<copyright>(C) 2005 - 2014 Open Source Matters. All rights reserved.</copyright>
+	<license>GNU General Public License version 2 or later; see LICENSE.txt</license>
+	<authorEmail>nttuyen266@gmail.com</authorEmail>
+	<authorUrl>www.joomla.org</authorUrl>
+	<version>3.2.0</version>
+	<description>COM_CONTENTAPI_XML_DESCRIPTION</description>
+
+    <install>
+        <sql>
+            <file driver="mysql" charset="utf8">sql/install.mysql.utf8.sql</file>
+        </sql>
+    </install>
+    <uninstall>
+        <sql>
+            <file driver="mysql" charset="utf8">sql/uninstall.mysql.utf8.sql</file>
+        </sql>
+    </uninstall>
+
+	<files folder="site">
+		<filename>contentapi.php</filename>
+		<filename>index.html</filename>
+	</files>
+
+	<administration>
+		<files folder="admin">
+			<filename>controller.php</filename>
+			<filename>index.html</filename>
+			<filename>contentapi.php</filename>
+			<folder>controllers</folder>
+			<folder>helpers</folder>
+			<folder>models</folder>
+			<folder>views</folder>
+            <folder>sql</folder>
+		</files>
+		<languages folder="admin">
+			<language tag="en-GB">language/en-GB.com_contentapi.ini</language>
+			<language tag="en-GB">language/en-GB.com_contentapi.sys.ini</language>
+		</languages>
+	</administration>
+</extension>
+
