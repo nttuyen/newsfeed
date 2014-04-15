@@ -14,7 +14,9 @@ class JSONDocument extends JDocumentJSON {
     private $headers = array();
     private $data = array();
 
-    public function __construct() {}
+    public function __construct($options = array()) {
+        parent::__construct($options);
+    }
 
     private static $instance = NULL;
     public static function getInstance() {
