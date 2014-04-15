@@ -20,6 +20,36 @@ class PlgContentCrawler extends JPlugin {
     private $allowed_contexts = array('com_content.article');
 
     /**
+     * Plugin that retrieves contact information for contact
+     *
+     * @param   string   $context  The context of the content being passed to the plugin.
+     * @param   mixed    &$article     An object with a "text" property
+     * @param   mixed    $params   Additional parameters. See {@see PlgContentContent()}.
+     * @param   integer  $page     Optional page number. Unused. Defaults to zero.
+     *
+     * @return  boolean	True on success.
+     */
+    public function onContentPrepare($context, &$article, $params, $page = 0) {
+        if(!is_object($article) || empty($article->id)) {
+            return true;
+        }
+        try {
+            $id = $article->id;
+            $db = JFactory::getDbo();
+            $query = $db->getQuery(true);
+            $query->select('cr.*')
+                ->from('#__content_crawled as cr')
+                ->where('cr.id = '.(int)$id);
+            $db->setQuery($query);
+            $result = $db->loadObject();
+            if($result && $result->origin_link) {
+                $article->originLink = $result->origin_link;
+            }
+        } catch(Exception $ex) {}
+        return true;
+    }
+
+    /**
      * Plugin that check
      *
      * @param   string   $context  The context of the content being passed to the plugin.
@@ -72,5 +102,19 @@ class PlgContentCrawler extends JPlugin {
             $crawled->crawled_time = $article->publish_up;
             $db->insertObject('#__content_crawled', $crawled);
         }
+    }
+
+    /**
+     * @param $context
+     * @param $article
+     */
+    public function onContentAfterDelete($context, $article) {
+        $id = $article->id;
+        $db = JFactory::getDbo();
+        $query = $db->getQuery(true);
+        $query->delete('#__content_crawled')
+            ->where('id = '.(int)$id);
+        $db->setQuery($query);
+        $db->execute();
     }
 }
