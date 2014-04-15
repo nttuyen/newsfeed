@@ -17,6 +17,8 @@ defined('_JEXEC') or die;
  * @since       3.2
  */
 class PlgContentCrawler extends JPlugin {
+    private $allowed_contexts = array('com_content.article');
+
     /**
      * Plugin that check
      *
@@ -27,9 +29,7 @@ class PlgContentCrawler extends JPlugin {
      * @return  boolean	True on success.
      */
     public function onContentBeforeSave($context, $table, $isNew) {
-        $allowed_contexts = array('com_content.article');
-
-        if (!in_array($context, $allowed_contexts) || !$isNew) {
+        if (!in_array($context, $this->allowed_contexts) || !$isNew) {
             return true;
         }
         if(empty($table->xreference)) {
@@ -50,5 +50,27 @@ class PlgContentCrawler extends JPlugin {
         }
 
         return true;
+    }
+
+    /**
+     * @param $context
+     * @param $article
+     * @param $isNew
+     */
+    public function onContentAfterSave($context, $article, $isNew) {
+        if (!in_array($context, $this->allowed_contexts) || !$isNew) {
+            return;
+        }
+        $app = JFactory::getApplication();
+        $input = $app->input;
+        $originLink = $input->getString('originLink', '');
+        if($originLink) {
+            $db = JFactory::getDbo();
+            $crawled = new stdClass();
+            $crawled->id = $article->id;
+            $crawled->origin_link = $originLink;
+            $crawled->crawled_time = $article->publish_up;
+            $db->insertObject('#__content_crawled', $crawled);
+        }
     }
 }
