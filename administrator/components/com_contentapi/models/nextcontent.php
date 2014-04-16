@@ -35,15 +35,18 @@ class ContentAPIModelNextcontent extends ContentModelArticle {
         //So, i need depend on Article model for loading content
         //And now, it is acceptable
         $originLink = '';
+        $cid = 0;
 		if(empty($pk)) {
             $now = date('Y-m-d H:i:s');
             $db = JFactory::getDbo();
             $query = $db->getQuery(true);
             $query->select('c.id as id')
                 ->select('cr.origin_link as origin_link')
+                ->select('cr.id as cid')
                 ->from('#__content AS c')
                 ->leftJoin('#__content_crawled AS cr ON c.id = cr.id')
                 ->where('c.state = 1')
+                ->where("(c.fulltext is NULL OR c.fulltext = '')")
                 ->where("c.publish_up <= '".$now."'")
                 ->where("(cr.crawled_time is NULL OR cr.crawled_time <= '$now')")
                 ->where("(cr.next_crawled_time is NULL OR cr.next_crawled_time <= '$now')")
@@ -52,6 +55,7 @@ class ContentAPIModelNextcontent extends ContentModelArticle {
             $db->setQuery($query, 0, 1);
             $result = $db->loadObject();
             if($result) {
+                $cid = $result->cid;
                 $pk = $result->id;
                 if($result->origin_link) {
                     $originLink = $result->origin_link;
@@ -75,8 +79,8 @@ class ContentAPIModelNextcontent extends ContentModelArticle {
             $contentCrawled->crawled_time = $now;
             $contentCrawled->next_crawled_time = $nextHour;
 
-            if(empty($originLink)) {
-                $contentCrawled->origin_link = $item->metadata->xreference;
+            if(empty($cid)) {
+                $contentCrawled->origin_link = $item->metadata['xreference'];
                 $db->insertObject('#__content_crawled', $contentCrawled);
             } else {
                 $db->updateObject('#__content_crawled', $contentCrawled, 'id');
