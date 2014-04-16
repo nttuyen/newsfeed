@@ -100,6 +100,7 @@ class PlgContentCrawler extends JPlugin {
             $crawled->id = $article->id;
             $crawled->origin_link = $originLink;
             $crawled->crawled_time = $article->publish_up;
+            $crawled->next_crawled_time = $article->publish_up;
             $db->insertObject('#__content_crawled', $crawled);
         }
     }

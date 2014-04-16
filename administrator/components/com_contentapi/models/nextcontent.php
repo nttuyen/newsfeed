@@ -46,7 +46,8 @@ class ContentAPIModelNextcontent extends ContentModelArticle {
                 ->where('c.state = 1')
                 ->where("c.publish_up <= '".$now."'")
                 ->where("(cr.crawled_time is NULL OR cr.crawled_time <= '$now')")
-                ->order('c.hits DESC, cr.crawled_time DESC, c.publish_up DESC');
+                ->where("(cr.next_crawled_time is NULL OR cr.next_crawled_time <= '$now')")
+                ->order('c.hits DESC, cr.next_crawled_time ASC, c.publish_up ASC');
             //$sql = str_replace('#__', 'tbl_', $query->__toString());
             $db->setQuery($query, 0, 1);
             $result = $db->loadObject();
@@ -62,7 +63,25 @@ class ContentAPIModelNextcontent extends ContentModelArticle {
 		}
 
 		$item = parent::getItem($pk);
-        $item->originLink = $originLink;
+        if($item) {
+            $db = JFactory::getDbo();
+            $item->originLink = $originLink;
+
+            $now = date('Y-m-d H:i:s');
+            $nextHour = date('Y-m-d H:i:s', strtotime('+1 hour'));
+
+            $contentCrawled = new stdClass();
+            $contentCrawled->id = $item->id;
+            $contentCrawled->crawled_time = $now;
+            $contentCrawled->next_crawled_time = $nextHour;
+
+            if(empty($originLink)) {
+                $contentCrawled->origin_link = $item->metadata->xreference;
+                $db->insertObject('#__content_crawled', $contentCrawled);
+            } else {
+                $db->updateObject('#__content_crawled', $contentCrawled, 'id');
+            }
+        }
 
         return $item;
 	}
