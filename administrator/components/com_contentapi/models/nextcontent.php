@@ -36,6 +36,7 @@ class ContentAPIModelNextcontent extends ContentModelArticle {
         //And now, it is acceptable
         $originLink = '';
         $cid = 0;
+        $attempted = 0;
 		if(empty($pk)) {
             $now = date('Y-m-d H:i:s');
             $db = JFactory::getDbo();
@@ -43,6 +44,7 @@ class ContentAPIModelNextcontent extends ContentModelArticle {
             $query->select('c.id as id')
                 ->select('cr.origin_link as origin_link')
                 ->select('cr.id as cid')
+                ->select('cr.crawler_attempted as attempted')
                 ->from('#__content AS c')
                 ->leftJoin('#__content_crawled AS cr ON c.id = cr.id')
                 ->where('c.state = 1')
@@ -60,7 +62,10 @@ class ContentAPIModelNextcontent extends ContentModelArticle {
                 if($result->origin_link) {
                     $originLink = $result->origin_link;
                 }
+                $attempted = (int)$result->attempted;
             }
+
+            $attempted++;
 		}
 		if(empty($pk)) {
 			return NULL;
@@ -72,12 +77,13 @@ class ContentAPIModelNextcontent extends ContentModelArticle {
             $item->originLink = $originLink;
 
             $now = date('Y-m-d H:i:s');
-            $nextHour = date('Y-m-d H:i:s', strtotime('+1 hour'));
+            $nextHour = date('Y-m-d H:i:s', strtotime('+15 minute'));
 
             $contentCrawled = new stdClass();
             $contentCrawled->id = $item->id;
             $contentCrawled->crawled_time = $now;
             $contentCrawled->next_crawled_time = $nextHour;
+            $contentCrawled->crawler_attempted = $attempted;
 
             if(empty($cid)) {
                 $contentCrawled->origin_link = $item->metadata['xreference'];
