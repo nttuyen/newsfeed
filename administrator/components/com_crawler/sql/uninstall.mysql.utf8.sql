@@ -1,0 +1,5 @@
+DROP TABLE IF EXISTS #__site;
+DROP TABLE IF EXISTS #__feed;
+DROP TABLE IF EXISTS #__feed_reader;
+DROP TABLE IF EXISTS #__scheduler;
+DROP TABLE IF EXISTS #__crawler;
