@@ -30,7 +30,7 @@ class CrawlerHelper extends JHelperContent {
 	{
 		JHtmlSidebar::addEntry(
 			JText::_('COM_CRAWLER_SUBMENU_SITES'),
-			'index.php?option=com_banners&view=banners',
+			'index.php?option=com_crawler&view=sites',
 			$vName == 'banners'
 		);
 

@@ -15,6 +15,8 @@ if (!JFactory::getUser()->authorise('core.manage', 'com_crawler'))
 	return JError::raiseWarning(404, JText::_('JERROR_ALERTNOAUTHOR'));
 }
 
+JLoader::register('CrawlerHelper', JPATH_COMPONENT.'/helpers/crawler.php');
+
 $controller = JControllerLegacy::getInstance('Crawler');
 $controller->execute(JFactory::getApplication()->input->get('task'));
 $controller->redirect();

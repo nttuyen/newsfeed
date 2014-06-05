@@ -17,13 +17,9 @@ defined('_JEXEC') or die;
  * @since       1.6
  */
 class CrawlerViewSites extends JViewLegacy {
-	protected $categories;
 
-	protected $items;
-
-	protected $pagination;
-
-	protected $state;
+    protected  $state;
+    protected  $sidebar;
 
 	/**
 	 * Method to display the view.
@@ -35,28 +31,14 @@ class CrawlerViewSites extends JViewLegacy {
 	 * @since   1.6
 	 */
 	public function display($tpl = null) {
-		$this->categories	= $this->get('CategoryOrders');
-		$this->items		= $this->get('Items');
-		$this->pagination	= $this->get('Pagination');
-		$this->state		= $this->get('State');
-		$this->filterForm    = $this->get('FilterForm');
-		$this->activeFilters = $this->get('ActiveFilters');
 
-		// Check for errors.
-		if (count($errors = $this->get('Errors'))) {
-			JError::raiseError(500, implode("\n", $errors));
-
-			return false;
-		}
+        //TODO:
+        $this->state = new JRegistry();
 
 		CrawlerHelper::addSubmenu('sites');
-
 		$this->addToolbar();
-
-		// Include the component HTML helpers.
-		JHtml::addIncludePath(JPATH_COMPONENT . '/helpers/html');
-
 		$this->sidebar = JHtmlSidebar::render();
+
 		parent::display($tpl);
 	}
 

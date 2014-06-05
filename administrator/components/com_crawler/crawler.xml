@@ -35,11 +35,17 @@
 			<folder>helpers</folder>
 			<folder>models</folder>
 			<folder>views</folder>
-      <folder>sql</folder>
+            <folder>sql</folder>
 		</files>
+        <menu>Crawler</menu>
+        <submenu>
+            <menu link="option=com_crawler&amp;view=sites">Sites</menu>
+        </submenu>
 		<languages folder="admin">
 			<language tag="en-GB">language/en-GB.com_crawler.ini</language>
 			<language tag="en-GB">language/en-GB.com_crawler.sys.ini</language>
+            <language tag="vi-VN">language/vi-VN.com_crawler.ini</language>
+            <language tag="vi-VN">language/vi-VN.com_crawler.sys.ini</language>
 		</languages>
 	</administration>
 </extension>
